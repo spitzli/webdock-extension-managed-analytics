@@ -2,12 +2,18 @@
 
 An external Webdock extension backed by Umami. The ElysiaJS runtime provides one action implementation for Console, HTTP API and MCP.
 
-Work in progress: local tests pass; no production plugin installation or public release is claimed yet.
+Operator-managed alpha: deployed as a real external plugin and used by the Webdock homepage. The host enforces project grants and private runtime TLS.
 
 - Enable one analytics website per project, with retry-safe deterministic identity.
 - Retrieve the tracking script configuration and website statistics.
 - Project-specific provider credentials remain in the Webdock host's named HTTP binding.
 - Core data stores the project mapping; the plugin receives no database or provider passwords.
+
+## Console panel
+
+![Initial project tracking configuration in the Webdock Console](https://github.com/spitzli/webdock-extension-managed-analytics/releases/download/v0.1.0-alpha.3/managed-analytics-console.png)
+
+The screenshot shows the initial English-language project configuration before the first production page view.
 
 ## Actions and routes
 
