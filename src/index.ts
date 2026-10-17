@@ -10,7 +10,7 @@ const publicKey=process.env.WEBDOCK_PLUGIN_HOST_PUBLIC_KEY;
 const generation=Number(process.env.WEBDOCK_PLUGIN_GENERATION);
 if(!credential||credential.length<32||!hostOrigin||!publicKey||!Number.isSafeInteger(generation)||generation<1)throw Error('Plugin runtime configuration required');
 const app=new Elysia({aot:true})
- .get('/healthz',()=>({ok:true,pluginID:id,version:'0.1.0-alpha.1',generation,protocolVersion:1}))
+ .get('/healthz',()=>({ok:true,pluginID:id,version:'0.1.0-alpha.2',generation,protocolVersion:1}))
  .post('/actions/:action',async({request,params,body,status})=>{
   const received=Buffer.from(request.headers.get('authorization')??'');const expected=Buffer.from('Bearer '+credential);
   if(received.length!==expected.length||!timingSafeEqual(received,expected))return status(401,{error:'Unauthorized runtime'});

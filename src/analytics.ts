@@ -14,8 +14,12 @@ export async function analyticsAction(ctx:Context,action:string,input:unknown,sc
  if(action==='analytics.provision'){
   const desired=provision.parse(input);const current=await ctx.data.read(key);
   if(current.value){const site=current.value as Site;if(site.websiteID!==id||site.domain!==desired.domain||site.name!==desired.name)throw Error('Analytics is already configured with different settings');return configuration(site,origin.origin);}
-  let result=await ctx.http.request({binding:'analytics',method:'GET',path:`/api/websites/${id}`});
-  if(result.status===404){result=await ctx.http.request({binding:'analytics',method:'POST',path:'/api/websites',body:{id,...desired}});if(result.status!==200&&result.status!==201){result=await ctx.http.request({binding:'analytics',method:'GET',path:`/api/websites/${id}`});}}
+  // Umami returns 401 for an unknown website to a non-admin user. Create with
+  // a deterministic ID first; reconcile an existing/lost create through GET.
+  let result;
+  try { result=await ctx.http.request({binding:'analytics',method:'POST',path:'/api/websites',body:{id,...desired}}); }
+  catch { result=await ctx.http.request({binding:'analytics',method:'GET',path:`/api/websites/${id}`}); }
+  if(result.status!==200&&result.status!==201)result=await ctx.http.request({binding:'analytics',method:'GET',path:`/api/websites/${id}`});
   const website=result.body as any;if(result.status!==200&&result.status!==201||website?.id!==id||website.domain!==desired.domain||website.name!==desired.name)throw Error('Provider website identity mismatch');
   const site={websiteID:id,...desired};
   try{await ctx.data.write({key,value:site,expectedRevision:null,idempotencyKey:'provision-site-v1'});}catch(error){const read=await ctx.data.read(key);if(JSON.stringify(read.value)!==JSON.stringify(site))throw error;}
