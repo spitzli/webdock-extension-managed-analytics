@@ -47,3 +47,9 @@ Custom domains are an operator-managed option. The default remains the provider 
 6. In the host's private runtime settings, set `publicConfiguration[PROJECT_ID].tracking_origin` to the verified HTTPS origin. The host selects only the current project's override and validates it against the plugin manifest. Reload the plugin panel and install its returned script configuration.
 
 This does not automatically change a customer's DNS or expose provider administration. The DNS/route/TLS step requires the operator; self-service domain automation is not claimed.
+
+## EU CI
+
+Source pushes and trusted same-repository pull requests run the frozen dependency install, build and unit tests through the dedicated rootless EU builder. External fork PRs cannot run on this persistent trusted runner. No hosted fallback, Docker daemon or provider/customer credentials are used.
+
+The manual `Plugin EU build` workflow can push a checked image candidate by enabling `publish_image`. It records the immutable image/source identity; existing versioned registry manifests and releases are unchanged. A new registry version still requires its proper manifest and signed integrity verification.
