@@ -1,5 +1,49 @@
 # Managed Analytics
 
+![Managed Analytics icon](assets/icon.svg)
+
+Add project-scoped website analytics using the managed Umami integration.
+
+## What you can do
+
+Enable one website per project, retrieve its tracking snippet and inspect visitors, page views and visits.
+
+## Setup and access
+
+Operator-managed alpha. Requires an installed runtime, project grant and named provider binding. Copy the returned project script into your website. A custom tracking domain needs explicit DNS verification and operator routing/TLS setup.
+
+## Data and security
+
+Provider credentials stay in the host binding; Core stores the project mapping. The tracking script sends website analytics to the configured provider. Review your website’s privacy and consent requirements before enabling collection.
+
+## Status and limits
+
+Alpha. Custom-domain setup is operator-managed; no self-service domain automation is claimed. Statistics depend on the provider and selected time window. Synthetic gallery counts are UI examples, not measured traffic.
+
+Catalog publication does not activate the plugin, enable public signup or grant
+access to any customer resource. A new presentation release must use a new version;
+previously signed releases and their assets stay immutable.
+
+## Gallery
+
+Actual sandboxed analytics UI with synthetic counts and tracking configuration. No traffic was collected or provider contacted.
+
+![Analytics panel showing fictional Harbor traffic and tracking code](screenshots/analytics-synthetic-preview.png)
+
+## Catalog source
+
+`.tabularium` is the complete catalog-refresh source. It retains the immutable
+runtime image and full protocol/access contract of the currently released
+`0.1.0-alpha.3` and adds the prepared presentation assets. Refresh it only from a
+reviewed immutable source commit. This does not replace signed release assets
+or activate the runtime.
+
+## Technical reference
+
+The retained implementation notes below include platform integration procedures.
+Commands referring to Core, `tools/` or `apps/console` require the [platform source
+checkout](https://github.com/spitzli/webdock); they are not standalone setup steps.
+
 An external Webdock extension backed by Umami. The ElysiaJS runtime provides one action implementation for Console, HTTP API and MCP.
 
 Operator-managed alpha: deployed as a real external plugin and used by the Webdock homepage. The host enforces project grants and private runtime TLS.
@@ -48,8 +92,8 @@ Custom domains are an operator-managed option. The default remains the provider 
 
 This does not automatically change a customer's DNS or expose provider administration. The DNS/route/TLS step requires the operator; self-service domain automation is not claimed.
 
-## EU CI
+## Blacksmith CI
 
-Source pushes and trusted same-repository pull requests run the frozen dependency install, build and unit tests through the dedicated rootless EU builder. External fork PRs cannot run on this persistent trusted runner. No hosted fallback, Docker daemon or provider/customer credentials are used.
+The Blacksmith GitHub App is installed for the exact 16 Spitzli platform, plugin and SDK repositories. The configured and observed region is `us-west`, under the owner’s EU-only exception for Spitzli’s own GitHub CI. The official managed-builder probe passed with `nofallback: true`. These prepared workflows use only Blacksmith; actual per-repository source checks and publication of the regular workflows remain pending. Provider and customer credentials are not used for source checks, and no builder fallback is allowed.
 
-The manual `Plugin EU build` workflow can push a checked image candidate by enabling `publish_image`. It records the immutable image/source identity; existing versioned registry manifests and releases are unchanged. A new registry version still requires its proper manifest and signed integrity verification.
+The prepared manual `Plugin Blacksmith build` workflow can push a checked image candidate by enabling `publish_image`. It records the immutable image/source identity; existing versioned registry manifests and releases are unchanged. A new registry version still requires its proper manifest and signed integrity verification.
